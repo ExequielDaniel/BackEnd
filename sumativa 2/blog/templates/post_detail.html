@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ post.titulo }}</title>
+    <!-- Agrega enlaces a Bootstrap CSS y otros estilos adicionales si es necesario -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <style>
+        body {
+            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+            margin: 20px;
+        }
+        h2 {
+            color: #007bff;
+        }
+        p {
+            color: #495057;
+        }
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .details-container {
+            float: right;
+            margin-top: 20px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <h2>{{ post.titulo }}</h2>
+                <p>{{ post.texto }}</p>
+                <p>Fecha: {{ post.fecha }}</p>
+                <p>Autor: {{ post.autor.username }}</p>
+                <p>Categoría: <a href="{% url 'categoria_detail' post.categoria.id %}">{{ post.categoria.nombre }}</a></p>
+                <p>Etiquetas: {% for hashtag in post.etiquetas.all %}<a href="{% url 'hashtag_detail' hashtag.id %}">{{ hashtag.nombre }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+                
+                <!-- Agrega aquí cualquier otra información específica del detalle del post -->
+            </div>
+
+            <!-- Información en el lado derecho -->
+            <div class="col-md-4">
+                <div class="details-container">
+                    <p>Fecha: {{ post.fecha }}</p>
+                    <p>Autor: {{ post.autor.username }}</p>
+                    <p>Categoría: {{ post.categoria.nombre }}</p>
+                    <p>Etiquetas: {% for hashtag in post.etiquetas.all %}<a href="{% url 'hashtag_detail' hashtag.id %}">{{ hashtag.nombre }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+                    <p class="text-end"><a href="{% url 'index' %}" class="btn btn-outline-primary">Volver a la página principal</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Agrega enlaces a Bootstrap JS y otros scripts adicionales si es necesario -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+    <!-- Agrega cualquier script adicional si es necesario -->
+</body>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio</title>
+    <!-- Agrega enlaces a Bootstrap CSS y otros estilos adicionales si es necesario -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        body {
+            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+        }
+        h1 {
+            color: brown;
+        }
+        .list-group-item:hover {
+            background-color: #f8f9fa; /* Color de fondo al pasar el mouse sobre los elementos de la lista */
+        }
+        .list-item-selected {
+            background-color: #007bff;
+            color: #ffffff;
+        }
+        #post-content {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-8">
+                <h1>Inicio</h1>
+                <div id="post-content" class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ ultima_publicacion.titulo }}</h5>
+                        <p class="card-text">{{ ultima_publicacion.texto }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <!-- Botón para acceder al menú de administración -->
+                <div class="card mt-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Admin</h5>
+                        <a href="{% url 'admin:index' %}" class="btn btn-primary">Acceder al Admin</a>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Publicaciones</h5>
+                        <ul class="list-group">
+                            {% for post in publicaciones %}
+                                <li class="list-group-item dynamic-link"><a href="{% url 'post_detail' post.id %}">{{ post.titulo }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                <div class="card mt-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Categorías</h5>
+                        <ul class="list-group">
+                            {% for categoria in categorias %}
+                                <li class="list-group-item dynamic-link"><a href="{% url 'categoria_detail' categoria.id %}">{{ categoria.nombre }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                <div class="card mt-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Etiquetas</h5>
+                        <ul class="list-group">
+                            {% for hashtag in hashtags %}
+                                <li class="list-group-item dynamic-link"><a href="{% url 'hashtag_detail' hashtag.id %}">{{ hashtag.nombre }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Agrega enlaces a Bootstrap JS y otros scripts adicionales si es necesario -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha384-GLhlTQ8iRABdZLl6O3uFJL4te3OuI1aFkw7cmDA6j6gDiiUJPrC7S" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function() {
+            // Manejar clic en enlaces dentro de la lista
+            $('.dynamic-link').on('click', function(e) {
+                e.preventDefault();
+
+                // Remover la clase 'list-item-selected' de todos los elementos de la lista
+                $('.dynamic-link').removeClass('list-item-selected');
+
+                // Agregar la clase 'list-item-selected' al elemento clicado
+                $(this).addClass('list-item-selected');
+
+                var url = $(this).attr('href');
+
+                $.ajax({
+                    url: url,
+                    method: 'GET',
+                    success: function(data) {
+                        // Reemplazar solo el contenido del post
+                        $('#post-content').html(data.html);
+                    },
+                    error: function(error) {
+                        console.error('Error al cargar la página: ', error);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
